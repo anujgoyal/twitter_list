@@ -111,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void failure(TwitterException e) {
                         Log.e(TAG, "[getList] error: " + e.getMessage());
-                        createList(listSlug);
+                        Log.e(TAG, "[getList] error: " + e.toString());
+                        //createList(listSlug);
                     }
                 });
     }
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void success(Result<JsonElement> result) {
                         Log.d(TAG, "[createListMember] status: " + result.response.getStatus());
-                        getListMembers(TWITTER_LIST, twitterId, true /*expected to be found*/);
+                        getListMembers(listSlug, twitterId, true /*expected to be found*/);
                     }
 
                     @Override
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void success(Result<JsonElement> result) {
                         Log.d(TAG, "[removeListMember] status: " + result.response.getStatus());
-                        getListMembers(TWITTER_LIST, twitterId, false);
+                        getListMembers(listSlug, twitterId, false);
                     }
 
                     @Override
