@@ -19,27 +19,40 @@
     <RelativeLayout
         android:id="@+id/rel_block"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv_info"
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true" />
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:text="\@fabric" />
 
         <Button
             android:id="@+id/button_unfollow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:clickable="true" />
+            android:clickable="true"
+            android:text="unfollow" />
 
         <Button
             android:id="@+id/button_follow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/button_unfollow"
-            android:clickable="true" />
+            android:clickable="true"
+            android:text="follow" />
+
+        <TextView
+            android:id="@+id/tv_info"
+            style="@android:style/TextAppearance.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/button_follow"
+            android:text="Status" />
 
     </RelativeLayout>
 
