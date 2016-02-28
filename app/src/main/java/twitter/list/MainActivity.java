@@ -111,8 +111,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void failure(TwitterException e) {
                         Log.e(TAG, "[getList] error: " + e.getMessage());
-                        Log.e(TAG, "[getList] error: " + e.toString());
-                        //createList(listSlug);
+                        createList(listSlug);
                     }
                 });
     }
