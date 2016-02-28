@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 23
@@ -8,8 +9,8 @@ android {
         applicationId "twitter.list"
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 20160227
+        versionName "1.16.0227"
     }
     buildTypes {
         release {
@@ -19,8 +20,22 @@ android {
     }
 }
 
+repositories {
+    jcenter()
+    maven { url 'https://maven.fabric.io/public' }
+    // maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+ext {
+    supportLibVersion = '23.2.0'
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.android.support:support-v4:${supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compile "com.android.support:design:${supportLibVersion}"
+
 }
