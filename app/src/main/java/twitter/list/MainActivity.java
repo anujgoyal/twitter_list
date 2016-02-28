@@ -30,30 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private MyTwitterApiClient mAPI;
     private int mColorRed, mColorBlue;
 
-    // assumes a valid session;
-    // create a temporary Twitter List for test purposes
-    private void setupList() {
-        Log.i(TAG, "[setupList]");
-        mLoginButton.setVisibility(View.GONE);
-        mLoginButton.setClickable(false);
-        mRel.setVisibility(View.VISIBLE);
-        mAPI = new MyTwitterApiClient(mSession);
-        mAPI.getCustomService().createList(TWITTER_LIST, "public",
-                new com.twitter.sdk.android.core.Callback<JsonElement>() {
-                    @Override
-                    public void success(Result<JsonElement> result) {
-                        Log.d(TAG, "[createList] status: " + result.response.getStatus());
-                        mTvName.setText(TWITTER_LIST + " created.");
-                        mTvName.setTextColor(mColorBlue);
-                    }
-
-                    @Override
-                    public void failure(TwitterException e) {
-                        Log.e(TAG, "[createList] error: " + e.getMessage());
-                    }
-                });
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "[onCreate]");
@@ -78,7 +54,11 @@ public class MainActivity extends AppCompatActivity {
             mLoginButton.setClickable(true);
         } else {
             Log.d(TAG, "Twitter session valid");
-            setupList();
+            mLoginButton.setVisibility(View.GONE);
+            mLoginButton.setClickable(false);
+            mRel.setVisibility(View.VISIBLE);
+            mAPI = new MyTwitterApiClient(mSession);
+            getList(TWITTER_LIST);
         }
 
         // setup login button callback; notes that it calls the Activity.onActivityResult
@@ -88,7 +68,11 @@ public class MainActivity extends AppCompatActivity {
             public void success(Result<TwitterSession> result) {
                 Log.d(TAG, "[success] session retrieved");
                 mSession = Twitter.getSessionManager().getActiveSession();
-                setupList();
+                mLoginButton.setVisibility(View.GONE);
+                mLoginButton.setClickable(false);
+                mRel.setVisibility(View.VISIBLE);
+                mAPI = new MyTwitterApiClient(mSession);
+                getList(TWITTER_LIST);
             }
 
             @Override
@@ -111,6 +95,43 @@ public class MainActivity extends AppCompatActivity {
                 unfollowOnTwitter(TWITTER_LIST, "fabric");
             }
         });
+    }
+
+    private void getList(final String listSlug) {
+        Log.i(TAG, "[getList] " + listSlug);
+        mAPI.getCustomService().getList(listSlug, mSession.getUserName(),
+                new com.twitter.sdk.android.core.Callback<JsonElement>() {
+                    @Override
+                    public void success(Result<JsonElement> result) {
+                        Log.d(TAG, "[getList] status: " + result.response.getStatus());
+                        mTvName.setText(listSlug + " retreived.");
+                        mTvName.setTextColor(mColorBlue);
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+                        Log.e(TAG, "[getList] error: " + e.getMessage());
+                        createList(listSlug);
+                    }
+                });
+    }
+
+    private void createList(final String listSlug) {
+        Log.i(TAG, "[createList] " + listSlug);
+        mAPI.getCustomService().createList(listSlug, "public",
+                new com.twitter.sdk.android.core.Callback<JsonElement>() {
+                    @Override
+                    public void success(Result<JsonElement> result) {
+                        Log.d(TAG, "[createList] status: " + result.response.getStatus());
+                        mTvName.setText(listSlug + " created.");
+                        mTvName.setTextColor(mColorBlue);
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+                        Log.e(TAG, "[createList] error: " + e.getMessage());
+                    }
+                });
     }
 
     // assumes valid mAPI, mSession
